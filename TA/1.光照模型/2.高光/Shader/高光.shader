@@ -1,4 +1,4 @@
-Shader "LK/漫反射"
+Shader "Custom/�߹�"
 {
     Properties
     {
@@ -51,31 +51,8 @@ Shader "LK/漫反射"
             
             fixed4 frag(v2f i) : SV_Target
             {
-                //1.兰伯特模型
-                //float nl=dot(i.nor,_WorldSpaceLightPos0);
-                //return  fixed4(nl,nl,nl,1);
+                
 
-                //2.半兰伯特模型
-                // float nl=dot(i.nor,_WorldSpaceLightPos0);
-                // float half_nl=nl*0.5+0.5;
-                // return  half_nl;
-
-                //3.WrapLight
-                // float nl=dot(i.nor,_WorldSpaceLightPos0);
-                // float wrapLight=(nl*_Wrap)/(1+_Wrap);
-                // return  wrapLight;
-
-                //4.bandedLight
-                // float nl=dot(i.nor,_WorldSpaceLightPos0);
-                // float bandedLight=floor((nl*0.5+0.5)*_StripNum)/_StripNum;
-                // return  bandedLight;
-
-                //5.CheapSSS 错误
-                float3 viewDir = normalize(_WorldSpaceCameraPos-i.worldPos);
-                float nbl=(i.nor*_B +_WorldSpaceLightPos0);
-                // float vnbl=dot(viewDir,nbl);
-              
-                return    saturate(pow(saturate(dot(nbl,viewDir)),_E)*_S);
             }
             ENDCG  
         }

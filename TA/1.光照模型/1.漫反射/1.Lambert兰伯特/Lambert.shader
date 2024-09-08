@@ -62,7 +62,7 @@ Shader "Lambert"
 				#ifdef ASE_NEEDS_FRAG_WORLD_POSITION
 				float3 worldPos : TEXCOORD0;
 				#endif
-				float3 ase_normal : NORMAL;
+				float4 ase_texcoord1 : TEXCOORD1;
 				UNITY_VERTEX_INPUT_INSTANCE_ID
 				UNITY_VERTEX_OUTPUT_STEREO
 			};
@@ -78,7 +78,12 @@ Shader "Lambert"
 				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
 				UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-				o.ase_normal = v.ase_normal;
+				float3 ase_worldNormal = UnityObjectToWorldNormal(v.ase_normal);
+				o.ase_texcoord1.xyz = ase_worldNormal;
+				
+				
+				//setting value to unused interpolator channels and avoid initialization warnings
+				o.ase_texcoord1.w = 0;
 				float3 vertexValue = float3(0, 0, 0);
 				#if ASE_ABSOLUTE_VERTEX_POS
 				vertexValue = v.vertex.xyz;
@@ -106,7 +111,8 @@ Shader "Lambert"
 				float3 WorldPosition = i.worldPos;
 				#endif
 				float3 worldSpaceLightDir = UnityWorldSpaceLightDir(WorldPosition);
-				float dotResult5 = dot( worldSpaceLightDir , i.ase_normal );
+				float3 ase_worldNormal = i.ase_texcoord1.xyz;
+				float dotResult5 = dot( worldSpaceLightDir , ase_worldNormal );
 				float4 temp_cast_0 = (saturate( dotResult5 )).xxxx;
 				
 				
@@ -122,15 +128,15 @@ Shader "Lambert"
 }
 /*ASEBEGIN
 Version=18800
--1920;-5;1920;1019;1258.736;462.8621;1;True;True
-Node;AmplifyShaderEditor.NormalVertexDataNode;4;-801.7356,109.1379;Inherit;False;0;5;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3;FLOAT;4
+0;0;1920;1011;1327.887;444.4954;1;True;False
 Node;AmplifyShaderEditor.WorldSpaceLightDirHlpNode;3;-841.7356,-39.86206;Inherit;False;False;1;0;FLOAT;0;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
+Node;AmplifyShaderEditor.WorldNormalVector;7;-816.8873,153.5046;Inherit;False;False;1;0;FLOAT3;0,0,1;False;4;FLOAT3;0;FLOAT;1;FLOAT;2;FLOAT;3
 Node;AmplifyShaderEditor.DotProductOpNode;5;-516.7356,43.13794;Inherit;True;2;0;FLOAT3;0,0,0;False;1;FLOAT3;0,0,0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.SaturateNode;6;-286.7356,36.13794;Inherit;False;1;0;FLOAT;0;False;1;FLOAT;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;1;-75,34;Float;False;True;-1;2;ASEMaterialInspector;100;1;Lambert;0770190933193b94aaa3065e307002fa;True;Unlit;0;0;Unlit;2;True;0;1;False;-1;0;False;-1;0;1;False;-1;0;False;-1;True;0;False;-1;0;False;-1;False;False;False;False;False;False;True;0;False;-1;True;0;False;-1;True;True;True;True;True;0;False;-1;False;False;False;True;False;255;False;-1;255;False;-1;255;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;7;False;-1;1;False;-1;1;False;-1;1;False;-1;True;1;False;-1;True;3;False;-1;True;True;0;False;-1;0;False;-1;True;1;RenderType=Opaque=RenderType;True;2;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;LightMode=ForwardBase;False;0;;0;0;Standard;1;Vertex Position,InvertActionOnDeselection;1;0;1;True;False;;False;0
 WireConnection;5;0;3;0
-WireConnection;5;1;4;0
+WireConnection;5;1;7;0
 WireConnection;6;0;5;0
 WireConnection;1;0;6;0
 ASEEND*/
-//CHKSM=457062E4B506B4EF060C7BDDCE90DAAAAD9A27F9
+//CHKSM=AD9545E7EEF69C27929A4D6EF4F4080433767E37
