@@ -49,7 +49,7 @@ Shader "LK/PointShader"
 
             float Diffuse_Wrap(float3 n,float3 l,float wrap=0.5)
             {
-                return saturate(dot(n,l))*wrap/(1+wrap);
+                return saturate((dot(n,l))*wrap)/(1+wrap);
             }
             float Specular_BinPhong(float3 N,float3 L,float3 V,float2 BPPowScale)
             {
@@ -75,7 +75,7 @@ Shader "LK/PointShader"
                 
                 float3 viewDir=normalize(_WorldSpaceCameraPos-i.worldPos);
                 float3 lightDir=normalize(_PointLightPos-i.worldPos);
-                return Diffuse_Wrap(i.nor,lightDir,0.5);//Lighting(i.nor,lightDir,viewDir,(1,2));
+                return Lighting(normalize(i.nor),lightDir,viewDir,(1,2));
 
                 
                 // 
