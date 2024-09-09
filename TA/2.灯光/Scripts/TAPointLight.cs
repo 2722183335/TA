@@ -14,7 +14,7 @@ public class TAPointLight : MonoBehaviour
     //     
     //    
     // }
-    private void Update()
+    private void OnDrawGizmos()
     {
         PreCull();
     }

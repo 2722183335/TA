@@ -62,7 +62,7 @@ Shader "LK/PointShader"
             }
             fixed3 frag(v2f i) : SV_Target
             {
-                // //∞Î¿º≤ÆÃÿƒ£–Õ
+                // //ÂçäÂÖ∞‰ºØÁâπÊ®°Âûã
                 // float nl05=dot(i.nor,_WorldSpaceLightPos0)*0.5+0.5;
                 // // float point=dot(_PointLightPos,i.nor)
                 // float pointLight = dot(_PointLightPos.xyz,i.nor)*_PointLightPos.w;
@@ -74,8 +74,8 @@ Shader "LK/PointShader"
 
                 
                 float3 viewDir=normalize(_WorldSpaceCameraPos-i.worldPos);
-                float3 lightDir=normalize(i.worldPos-_PointLightPos);
-                return Lighting(i.nor,lightDir,viewDir,(1,2));
+                float3 lightDir=normalize(_PointLightPos-i.worldPos);
+                return Diffuse_Wrap(i.nor,lightDir,0.5);//Lighting(i.nor,lightDir,viewDir,(1,2));
 
                 
                 // 
